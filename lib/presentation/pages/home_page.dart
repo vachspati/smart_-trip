@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../data/repositories/trip_repository.dart';
 import '../../data/sources/agent_api.dart';
-import 'package:smart_trip_planner_flutter/data/local_db.dart';
 import '../../domain/usecases/usecases.dart';
 import 'chat_page.dart';
 import 'trip_detail_page.dart';
@@ -13,7 +12,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final repo = TripRepository(agentApi: AgentApi(), localDb: LocalDb());
+  final repo = TripRepository(agentApi: AgentApi());
 
   late final GetTripsUseCase _getTrips = GetTripsUseCase(repo);
   List<TripSummary> _trips = [];
