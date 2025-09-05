@@ -1,48 +1,26 @@
 name: smart_trip_planner_flutter
-description: A smart trip planner Flutter application.
-publish_to: "none"
-
-version: 1.0.0+1
+description: AI-powered trip planner app
+publish_to: 'none'
+version: 1.0.0
 
 environment:
-  sdk: ">=3.8.0 <4.0.0"
-  flutter: ">=3.10.0"
+  sdk: '>=3.1.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-
-  # Core Flutter packages
-  cupertino_icons: ^1.0.6
-
-  # Local database
-  isar: ^3.0.5
-  isar_flutter_libs: ^3.0.5
-
-  # Path provider for file paths
+  flutter_riverpod: ^2.6.1
+  sqflite: ^2.3.0
   path_provider: ^2.1.2
-
-  # JSON serialization
-  json_annotation: ^4.9.0
-
-  # Lints for code quality
-  flutter_lints: ^5.0.0
-
-  # Other dependencies you may use (update as needed)
   http: ^1.2.0
+  url_launcher: ^6.2.5
   connectivity_plus: ^6.1.5
-  url_launcher: ^6.3.2
+  json_annotation: ^4.9.0
+  cupertino_icons: ^1.0.6
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
   build_runner: ^2.4.6
   json_serializable: ^6.8.0
-  isar_generator: ^3.0.5
-
-flutter:
-  uses-material-design: true
-
-  assets:
-    - assets/
+  flutter_lints: ^5.0.0

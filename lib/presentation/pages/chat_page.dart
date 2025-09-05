@@ -138,25 +138,65 @@ class _ChatPageState extends State<ChatPage> {
                 ),
               ),
               SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: _controller,
-                          decoration: const InputDecoration(
-                            hintText: 'Describe your trip...',
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    border: Border(
+                      top: BorderSide(
+                        color: Colors.grey.shade300,
+                        width: 1,
+                      ),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade100,
+                              borderRadius: BorderRadius.circular(24),
+                              border: Border.all(
+                                color: Colors.grey.shade300,
+                                width: 1,
+                              ),
+                            ),
+                            child: TextField(
+                              controller: _controller,
+                              decoration: const InputDecoration(
+                                hintText: 'Describe your trip...',
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 12,
+                                ),
+                                border: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                              ),
+                              onSubmitted: (_) => _send(),
+                              maxLines: null,
+                              textCapitalization: TextCapitalization.sentences,
+                            ),
                           ),
-                          onSubmitted: (_) => _send(),
                         ),
-                      ),
-                      const SizedBox(width: 8),
-                      IconButton(
-                        onPressed: _send,
-                        icon: const Icon(Icons.send),
-                      ),
-                    ],
+                        const SizedBox(width: 8),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                          child: IconButton(
+                            onPressed: _streaming ? null : _send,
+                            icon: const Icon(
+                              Icons.send,
+                              color: Colors.white,
+                            ),
+                            splashRadius: 24,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

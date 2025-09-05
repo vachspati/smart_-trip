@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:smart_trip_planner_flutter/data/local_db.dart';
-import 'package:isar/isar.dart';
+import '../../data/local_db.dart';
 import '../../data/models/itinerary.dart';
 import '../widgets/itinerary_view.dart';
 
 class TripDetailPage extends StatelessWidget {
-  final Id tripId;
+  final int tripId;
   const TripDetailPage({super.key, required this.tripId});
 
   @override

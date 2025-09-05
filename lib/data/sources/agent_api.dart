@@ -1,9 +1,7 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import '../../core/env.dart';
 import '../../core/http_client.dart';
 import '../../core/metrics.dart';
-import '../models/itinerary.dart';
 
 typedef StreamCallback = void Function(String token);
 typedef JsonCallback = void Function(Map<String, dynamic> json);

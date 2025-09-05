@@ -1,6 +1,6 @@
 import '../models/itinerary.dart';
 import '../sources/agent_api.dart';
-import 'package:smart_trip_planner_flutter/data/local_db.dart';
+import '../local_db.dart';
 import '../../core/metrics.dart';
 
 class TripRepository {

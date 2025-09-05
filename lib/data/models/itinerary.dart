@@ -1,12 +1,10 @@
-import 'package:isar/isar.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'itinerary.g.dart';
 
-@collection
 @JsonSerializable()
 class Trip {
-  Id id = Isar.autoIncrement;
+  int id = 0;
   late String title;
   late String startDate; // ISO (yyyy-MM-dd)
   late String endDate; // ISO (yyyy-MM-dd)
@@ -19,7 +17,6 @@ class Trip {
   Map<String, dynamic> toJson() => _$TripToJson(this);
 }
 
-@embedded
 @JsonSerializable()
 class TripDay {
   late String date; // ISO
@@ -34,7 +31,6 @@ class TripDay {
   Map<String, dynamic> toJson() => _$TripDayToJson(this);
 }
 
-@embedded
 @JsonSerializable()
 class TripItem {
   late String time; // HH:mm
