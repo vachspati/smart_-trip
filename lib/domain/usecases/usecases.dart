@@ -12,6 +12,7 @@ class GenerateItineraryUseCase {
     required void Function(String) onToken,
     required void Function(TripEntity) onTrip,
     required void Function(TokenMetrics) onMetrics,
+    required void Function(String) onError,
   }) async {
     await repo.generateStream(
       prompt: prompt,
@@ -19,6 +20,7 @@ class GenerateItineraryUseCase {
       onToken: onToken,
       onTrip: (t) => onTrip(TripEntity.fromModel(t)),
       onMetrics: onMetrics,
+      onError: onError,
     );
   }
 }

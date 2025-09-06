@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../data/models/itinerary.dart';
+import '../../core/maps_integration.dart';
 
 class ItineraryView extends StatelessWidget {
   final Trip trip;
@@ -97,10 +97,17 @@ class _DayCard extends StatelessWidget {
     );
   }
 
-  Future<void> _openMaps(String loc) async {
-    final uri = Uri.parse('https://maps.google.com/?q=$loc');
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
+  Future<void> _openMaps(String location) async {
+    try {
+      await MapsIntegration.openLocation(location);
+    } catch (e) {
+      // Fallback: try to search for the location as text
+      try {
+        await MapsIntegration.searchLocation(location);
+      } catch (e) {
+        // Handle error silently or show a snackbar
+        debugPrint('Failed to open maps: $e');
+      }
     }
   }
 }

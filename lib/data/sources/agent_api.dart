@@ -1,19 +1,16 @@
-import 'dart:convert';
-import '../../core/env.dart';
-import '../../core/http_client.dart';
+import '../../core/backend_api_client.dart';
 import '../../core/metrics.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 typedef StreamCallback = void Function(String token);
 typedef JsonCallback = void Function(Map<String, dynamic> json);
 typedef MetricsCallback = void Function(TokenMetrics metrics);
+typedef ErrorCallback = void Function(String error);
 
 class AgentApi {
-  final _client = StreamingHttpClient();
+  final BackendApiClient _client;
 
-  Uri _endpoint() {
-    final base = Env.functionsBaseUrl;
-    return Uri.parse('$base/${Env.functionsName}');
-  }
+  AgentApi({BackendApiClient? client}) : _client = client ?? BackendApiClient();
 
   Future<void> generateItineraryStream({
     required String prompt,
@@ -22,46 +19,72 @@ class AgentApi {
     required StreamCallback onToken,
     required JsonCallback onJson,
     required MetricsCallback onMetrics,
+    ErrorCallback? onError,
   }) async {
-    final uri = _endpoint();
-    await _client.postStream(
-      uri: uri,
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'text/event-stream',
-      },
-      body: {
-        'prompt': prompt,
-        'previousItinerary': previousItinerary,
-        'chatHistory': chatHistory ?? [],
-      },
-      onChunk: (chunk) {
-        // Accept both SSE style: "data: {...}\n\n" and plain text tokens
-        for (final line in const LineSplitter().convert(chunk)) {
-          if (line.startsWith('data:')) {
-            final data = line.substring(5).trim();
-            if (data == '[DONE]') return;
-            try {
-              final obj = jsonDecode(data) as Map<String, dynamic>;
-              final type = obj['type'];
-              if (type == 'token') {
-                onToken(obj['text'] as String);
-              } else if (type == 'json') {
-                onJson(obj['payload'] as Map<String, dynamic>);
-              } else if (type == 'metrics') {
-                onMetrics(
-                  TokenMetrics.fromJson(obj['payload'] as Map<String, dynamic>),
-                );
-              }
-            } catch (_) {
-              // ignore parse errors
-            }
-          } else {
-            // plain chunked text
-            onToken(line);
-          }
-        }
-      },
+    await _client.generateItineraryStream(
+      prompt: prompt,
+      previousItinerary: previousItinerary,
+      chatHistory: chatHistory,
+      onToken: onToken,
+      onTrip: onJson,
+      onMetrics: onMetrics,
+      onError: onError ?? (error) => throw Exception(error),
     );
   }
+
+  /// Search flights
+  Future<Map<String, dynamic>> searchFlights(
+      Map<String, dynamic> searchParams) async {
+    final response = await _client.post('/search-flights', data: searchParams);
+    return response;
+  }
+
+  /// Search hotels
+  Future<Map<String, dynamic>> searchHotels(
+      Map<String, dynamic> searchParams) async {
+    final response = await _client.post('/search-hotels', data: searchParams);
+    return response;
+  }
+
+  /// Search car rentals
+  Future<Map<String, dynamic>> searchCars(
+      Map<String, dynamic> searchParams) async {
+    final response = await _client.post('/search-cars', data: searchParams);
+    return response;
+  }
+
+  /// Search restaurants
+  Future<Map<String, dynamic>> searchRestaurants(
+      Map<String, dynamic> searchParams) async {
+    final response =
+        await _client.post('/search-restaurants', data: searchParams);
+    return response;
+  }
+
+  /// Get popular destinations
+  Future<List<dynamic>> getDestinations() async {
+    final response = await _client.get('/destinations');
+    return response as List<dynamic>;
+  }
+
+  /// Get travel tips
+  Future<List<dynamic>> getTips() async {
+    final response = await _client.get('/tips');
+    return response as List<dynamic>;
+  }
+
+  /// Check if backend is healthy and reachable
+  Future<bool> healthCheck() => _client.healthCheck();
+
+  /// Check if device is online
+  Future<bool> isOnline() => _client.isOnline();
+
+  void dispose() {
+    _client.dispose();
+  }
 }
+
+// Provider for AgentApi
+final agentApiProvider = Provider<AgentApi>((ref) {
+  return AgentApi();
+});

@@ -43,3 +43,34 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Backend dependencies and sensitive files
+backend/node_modules/
+backend/.env
+backend/package-lock.json
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Generated files
+*.g.dart
+*.freezed.dart
+*.mocks.dart
+
+# Coverage
+coverage/
+
+# Firebase
+firebase_options.dart
+
+# Temporary files
+*.tmp
+*.temp
+
+# Documentation backups
+README_OLD.md
